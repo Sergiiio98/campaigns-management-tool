@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Navigation />}>
-          <Route path="/myCampaigns" index element={<MyCampaigns />} />
+          <Route index element={<MyCampaigns />} />
           <Route path="/addCampaign" element={<AddCampaign />} />
           <Route path="/myCampaigns" element={<MyCampaigns />} />
           <Route path="/editCampaign/:campaignID" element={<EditCampaign />} />
