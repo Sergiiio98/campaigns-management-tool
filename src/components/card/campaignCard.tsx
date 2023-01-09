@@ -72,7 +72,7 @@ const CampaignCard = ({
         </Card.Header>
         <Card.Header style={{ display: "flex", justifyContent: "flex-end" }}>
           <div>
-            <Link to={`/editCampaign/${id}`}>
+            <Link style={{ color: "black" }} to={`/editCampaign/${id}`}>
               <span className="icon">{editIcon}</span>
             </Link>
             <span onClick={() => deleteCampaign(id)} className="icon">
