@@ -1,24 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import Home from "./routes/home/home.component";
+import { Route, Routes } from "react-router-dom";
+import Navigation from "./components/navigation/navigation.component";
+import AddCampaign from "./routes/addCampaign/addCampaign.component";
+import MyCampaigns from "./routes/myCampaigns/myCampaigns.component";
+import EditCampaign from "./routes/editCampaign/editCampaign.component";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path="/" element={<Navigation />}>
+          <Route index element={<Home />} />
+          <Route path="/addCampaign" index element={<AddCampaign />} />
+          <Route path="/myCampaigns" index element={<MyCampaigns />} />
+          <Route path="/editCampaign/:campaignID" element={<EditCampaign />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
