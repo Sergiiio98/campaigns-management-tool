@@ -5,7 +5,6 @@
 
 
 ## General info
-Campaigns Management Tool - Recruitment exercise
 Deployed app: https://campaigns-management-tool.vercel.app/
 
 
