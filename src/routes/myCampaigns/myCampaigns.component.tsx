@@ -12,6 +12,10 @@ import CampaignsCard from "../../components/card/campaignCard";
 import { Container } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { Notification } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons";
+import { Group, Button } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 
 const MyCampaigns = () => {
   const [campaigns, setCampaigns] = useState<DocumentData>([]);
@@ -27,6 +31,11 @@ const MyCampaigns = () => {
     await deleteDoc(doc(db, "campaigns", id))
       .then(() => {
         console.log("Document successfully deleted!");
+        showNotification({
+          title: "Deleted",
+          message: "Campaing was removed successfuly!",
+          color: "red",
+        });
         setDeleteHelper((prev) => !prev);
       })
       .catch((error) => {
@@ -43,7 +52,13 @@ const MyCampaigns = () => {
   const renderCards = () => {
     return campaigns.map((el: any) => {
       return (
-        <div style={{ marginBottom: "25px" }}>
+        <div
+          style={{
+            marginBottom: "25px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <CampaignsCard
             campaignName={el.campaignName}
             keywords={el.keywords}
@@ -62,9 +77,10 @@ const MyCampaigns = () => {
 
   return (
     <div>
-      {" "}
       <Container style={{ marginTop: "50px" }}>
-        <Row md={4}>{renderCards()}</Row>
+        <Row xxl={4} xl={3} lg={3} md={2} sm={1}>
+          {renderCards()}
+        </Row>
       </Container>
     </div>
   );

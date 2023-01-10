@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 import { db } from "../../utils/firebase";
 import { useContext } from "react";
 import { AccountContext } from "../../contexts/accountBalance.component";
+import { Group } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 
 import {
   collection,
@@ -124,7 +126,13 @@ const AddCampaign = ({
       town: form.town,
       radius: form.radius,
       id: id,
-    });
+    }).then(() =>
+      showNotification({
+        title: "Campaign added",
+        message: "Campaign was added successfuly!",
+        color: "green",
+      })
+    );
   }
 
   async function editCampaign(form: IForm) {
@@ -139,7 +147,13 @@ const AddCampaign = ({
       town: form.town,
       radius: form.radius,
       id: form.id,
-    });
+    }).then(() =>
+      showNotification({
+        title: "Campaign edited",
+        message: "Campaign was edited successfuly!",
+        color: "blue",
+      })
+    );
   }
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
