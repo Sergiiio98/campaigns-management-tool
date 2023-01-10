@@ -104,7 +104,9 @@ const AddCampaign = ({
 
   const checkIfCanBeDeducted = (price: number) => {
     if (currentBalance - price > 0) {
-      payment(price);
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -159,25 +161,43 @@ const AddCampaign = ({
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (editMode) {
-      editCampaign(form)
-        .then((response) => {
-          setIsSaved(true);
-          if (form.bidAmount) checkIfCanBeDeducted(form.bidAmount);
-          setPayHelper((prev) => !prev);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (form.bidAmount)
+        if (checkIfCanBeDeducted(form.bidAmount)) {
+          editCampaign(form)
+            .then((response) => {
+              setIsSaved(true);
+              if (form.bidAmount) payment(form.bidAmount);
+              setPayHelper((prev) => !prev);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          showNotification({
+            title: "Not enough money",
+            message: "You don't have money to perform this action",
+            color: "red",
+          });
+        }
     } else {
-      saveCampaign(form)
-        .then((response) => {
-          setIsSaved(true);
-          if (form.bidAmount) checkIfCanBeDeducted(form.bidAmount);
-          setPayHelper((prev) => !prev);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (form.bidAmount)
+        if (checkIfCanBeDeducted(form.bidAmount)) {
+          saveCampaign(form)
+            .then((response) => {
+              setIsSaved(true);
+              if (form.bidAmount) payment(form.bidAmount);
+              setPayHelper((prev) => !prev);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          showNotification({
+            title: "Not enough money",
+            message: "You don't have money to perform this action",
+            color: "red",
+          });
+        }
     }
   };
 
