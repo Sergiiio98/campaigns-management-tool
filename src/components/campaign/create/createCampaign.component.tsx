@@ -3,24 +3,15 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { useState, useEffect } from "react";
-import "./addCampaign.styles.scss";
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "../../utils/firebase";
+import { db } from "../../../utils/firebase";
 import { useContext } from "react";
-import { AccountContext } from "../../contexts/accountBalance.component";
-import { Group } from "@mantine/core";
+import { AccountContext } from "../../../contexts/accountBalance.component";
 import { showNotification } from "@mantine/notifications";
-
-import {
-  collection,
-  getDocs,
-  setDoc,
-  getDoc,
-  doc,
-  DocumentData,
-  deleteDoc,
-} from "firebase/firestore/lite";
+import { setDoc, getDoc, doc } from "firebase/firestore/lite";
+import { useNavigate } from "react-router-dom";
+import "./createCampaign.styles.scss";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 interface IOption {
   label: string;
@@ -30,7 +21,7 @@ interface IOption {
 
 interface IForm {
   campaignName?: string;
-  keywords?: Array<object>;
+  keywords?: Array<IOption>;
   bidAmount?: number;
   campaignFund?: number;
   status?: boolean;
@@ -48,7 +39,7 @@ const options: IOption[] = [
   { label: "Chiarity", value: "chiarity", id: 4 },
 ];
 
-const AddCampaign = ({
+const CreateCampaign = ({
   campaignName = "",
   keywords = [],
   bidAmount = 0,
@@ -59,6 +50,7 @@ const AddCampaign = ({
   editMode = false,
   id = "",
 }: IForm) => {
+  let navigate = useNavigate();
   const [multiSelections, setMultiSelections] = useState<any>(keywords);
   const { currentBalance, setCurrentBalance } = useContext(AccountContext);
   const [isSaved, setIsSaved] = useState(false);
@@ -95,7 +87,6 @@ const AddCampaign = ({
     getAccountValue(db).then((value) => {
       setCurrentBalance(value?.balance);
     });
-    console.log("pay");
   }, [payHelper]);
 
   useEffect(() => {
@@ -139,7 +130,6 @@ const AddCampaign = ({
 
   async function editCampaign(form: IForm) {
     let id = form.id === undefined ? "" : form.id;
-    console.log(id);
     return await setDoc(doc(db, "campaigns", id), {
       campaignName: form.campaignName,
       keywords: form.keywords,
@@ -166,8 +156,7 @@ const AddCampaign = ({
           editCampaign(form)
             .then((response) => {
               setIsSaved(true);
-              if (form.bidAmount) payment(form.bidAmount);
-              setPayHelper((prev) => !prev);
+              return navigate("/");
             })
             .catch((error) => {
               console.log(error);
@@ -268,7 +257,6 @@ const AddCampaign = ({
               type="switch"
               id="custom-switch"
               label="Status"
-              required
             />
           </Form.Group>
 
@@ -295,6 +283,7 @@ const AddCampaign = ({
                   value={form.radius}
                   onChange={handleChange}
                   name="radius"
+                  type="number"
                   aria-label="Amount (to the nearest dollar)"
                 />
                 <InputGroup.Text>km</InputGroup.Text>
@@ -319,4 +308,4 @@ const AddCampaign = ({
   );
 };
 
-export default AddCampaign;
+export default CreateCampaign;

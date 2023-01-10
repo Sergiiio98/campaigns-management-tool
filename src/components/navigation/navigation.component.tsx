@@ -1,23 +1,15 @@
 import { Outlet, Link } from "react-router-dom";
-import "./navigation.styles.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { LinkContainer } from "react-router-bootstrap";
+import { db } from "../../utils/firebase";
+import { useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore/lite";
+import { useContext } from "react";
+import { AccountContext } from "../../contexts/accountBalance.component";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { db } from "../../utils/firebase";
-import { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  getDoc,
-  DocumentData,
-  deleteDoc,
-} from "firebase/firestore/lite";
-import { useContext } from "react";
-import { AccountContext } from "../../contexts/accountBalance.component";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./navigation.styles.scss";
 
 const Navigation = () => {
   const { currentBalance, setCurrentBalance } = useContext(AccountContext);
@@ -50,7 +42,7 @@ const Navigation = () => {
               </Nav>
               <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                  Emerald funds: <a href="#login">{currentBalance + "$"}</a>
+                  Emerald funds: <span>{currentBalance + "$"}</span>
                 </Navbar.Text>
               </Navbar.Collapse>
             </Navbar.Collapse>

@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-import * as React from "react";
 
 interface IContext {
   currentBalance: number;

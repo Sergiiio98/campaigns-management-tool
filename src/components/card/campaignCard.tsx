@@ -1,23 +1,8 @@
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import "./campaignCard.scss";
-import { Container } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
+import Card from "react-bootstrap/Card";
 import Keyword from "../keyword/keyword.component";
-import * as firebase from "firebase/app";
-import {
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  DocumentData,
-  deleteDoc,
-} from "firebase/firestore/lite";
-
 import { trashIcon, editIcon } from "../../assets/icons";
+import "./campaignCard.scss";
 
 interface ICard {
   campaignName: string;
@@ -29,11 +14,6 @@ interface ICard {
   radius: number;
   id: string;
   deleteCampaign: Function;
-}
-interface IOption {
-  label: string;
-  value: string;
-  id: number;
 }
 
 const CampaignCard = ({

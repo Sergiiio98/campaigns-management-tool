@@ -1,25 +1,27 @@
-import { db } from "../../utils/firebase";
+import { db } from "../../../utils/firebase";
+import { useEffect, useState } from "react";
+import CampaignsCard from "../../../components/card/campaignCard";
+import { Container } from "react-bootstrap";
+import Row from "react-bootstrap/Row";
+import { showNotification } from "@mantine/notifications";
 import {
   collection,
   getDocs,
-  setDoc,
   doc,
   DocumentData,
   deleteDoc,
 } from "firebase/firestore/lite";
-import { useEffect, useState } from "react";
-import CampaignsCard from "../../components/card/campaignCard";
-import { Container } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Notification } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons";
-import { Group, Button } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 
-const MyCampaigns = () => {
+const Campaigns = () => {
   const [campaigns, setCampaigns] = useState<DocumentData>([]);
   const [deleteHelper, setDeleteHelper] = useState(false);
+
+  useEffect(() => {
+    getCampaigns(db).then((campaigns) => {
+      setCampaigns(campaigns);
+    });
+  }, [deleteHelper]);
+
   async function getCampaigns(db: any) {
     const users = collection(db, "campaigns");
     const userSnapshot = await getDocs(users);
@@ -27,10 +29,9 @@ const MyCampaigns = () => {
     return userList;
   }
 
-  async function deleteCampaign(id: any) {
+  async function deleteCampaign(id: string) {
     await deleteDoc(doc(db, "campaigns", id))
       .then(() => {
-        console.log("Document successfully deleted!");
         showNotification({
           title: "Deleted",
           message: "Campaing was removed successfuly!",
@@ -39,15 +40,13 @@ const MyCampaigns = () => {
         setDeleteHelper((prev) => !prev);
       })
       .catch((error) => {
-        console.error("Error deleting document: ", error);
+        showNotification({
+          title: "Error",
+          message: error,
+          color: "red",
+        });
       });
   }
-
-  useEffect(() => {
-    getCampaigns(db).then((campaigns) => {
-      setCampaigns(campaigns);
-    });
-  }, [deleteHelper]);
 
   const renderCards = () => {
     return campaigns.map((el: any) => {
@@ -86,4 +85,4 @@ const MyCampaigns = () => {
   );
 };
 
-export default MyCampaigns;
+export default Campaigns;

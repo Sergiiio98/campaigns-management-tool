@@ -1,15 +1,8 @@
-import { Route, useParams } from "react-router-dom";
-import AddCampaign from "../addCampaign/addCampaign.component";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  getDoc,
-  setDoc,
-  doc,
-  DocumentData,
-} from "firebase/firestore/lite";
-import { db } from "../../utils/firebase";
+import { getDoc, doc } from "firebase/firestore/lite";
+import { db } from "../../../utils/firebase";
+import CreateCampaign from "../create/createCampaign.component";
 
 const EditCampaign = () => {
   const [data, setData] = useState<any>();
@@ -18,17 +11,17 @@ const EditCampaign = () => {
 
   useEffect(() => {
     const docRef = doc(db, "campaigns", id);
-
     getDoc(docRef)
       .then((snapshot) => {
         return snapshot.data();
       })
       .then((snap) => setData(snap));
   }, []);
+
   return (
     <div>
       {data && (
-        <AddCampaign
+        <CreateCampaign
           campaignName={data.campaignName}
           keywords={data.keywords}
           bidAmount={data.bidAmount}
