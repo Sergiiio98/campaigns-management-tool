@@ -16,9 +16,11 @@ import {
   DocumentData,
   deleteDoc,
 } from "firebase/firestore/lite";
+import { useContext } from "react";
+import { AccountContext } from "../../contexts/accountBalance.component";
 
 const Navigation = () => {
-  const [accountBalance, setAccountBalance] = useState<any>();
+  const { currentBalance, setCurrentBalance } = useContext(AccountContext);
   async function getCampaigns(db: any) {
     const docRef = doc(db, "accountBalance", "acc");
     const docSnap = await getDoc(docRef);
@@ -27,7 +29,7 @@ const Navigation = () => {
 
   useEffect(() => {
     getCampaigns(db).then((campaigns) => {
-      setAccountBalance(campaigns?.balance);
+      setCurrentBalance(campaigns?.balance);
     });
   }, []);
 
@@ -48,7 +50,7 @@ const Navigation = () => {
               </Nav>
               <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                  Emerald funds: <a href="#login">{accountBalance + "$"}</a>
+                  Emerald funds: <a href="#login">{currentBalance + "$"}</a>
                 </Navbar.Text>
               </Navbar.Collapse>
             </Navbar.Collapse>

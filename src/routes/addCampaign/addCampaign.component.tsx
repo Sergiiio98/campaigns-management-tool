@@ -7,6 +7,8 @@ import "./addCampaign.styles.scss";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "../../utils/firebase";
+import { useContext } from "react";
+import { AccountContext } from "../../contexts/accountBalance.component";
 
 import {
   collection,
@@ -56,7 +58,7 @@ const AddCampaign = ({
   id = "",
 }: IForm) => {
   const [multiSelections, setMultiSelections] = useState<any>(keywords);
-  const [accountBalance, setAccountBalance] = useState<any>();
+  const { currentBalance, setCurrentBalance } = useContext(AccountContext);
   const [isSaved, setIsSaved] = useState(false);
   const [payHelper, setPayHelper] = useState(false);
   const [form, setForm] = useState<IForm>({
@@ -89,7 +91,7 @@ const AddCampaign = ({
 
   useEffect(() => {
     getAccountValue(db).then((value) => {
-      setAccountBalance(value?.balance);
+      setCurrentBalance(value?.balance);
     });
     console.log("pay");
   }, [payHelper]);
@@ -99,13 +101,13 @@ const AddCampaign = ({
   }, [multiSelections]);
 
   const checkIfCanBeDeducted = (price: number) => {
-    if (accountBalance - price > 0) {
+    if (currentBalance - price > 0) {
       payment(price);
     }
   };
 
   async function payment(newValue: number) {
-    let newBankState = accountBalance - newValue;
+    let newBankState = currentBalance - newValue;
     return await setDoc(doc(db, "accountBalance", "acc"), {
       balance: newBankState,
     });
